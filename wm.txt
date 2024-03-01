@@ -1,0 +1,195 @@
+Information about my project: Substack's mission is to make it simple to start publications that make money from subscriptions. We offer a platform built specifically for subscription publishing and provide independent publishers with the support they need to build strong and sustainable businesses.
+
+Syndicate's mission is to enable users to create and distribute personal newsletters, allowing them to share long-form content and life updates not with the world, but specifically with the people they choose. We aim to provide control over privacy and audience, ensuring authentic and meaningful communication.
+
+Inspiration
+* The internet initially allowed people to share information freely and create online personas through websites and blogs. I loved this era of personal expression and information sharing.
+* Email enabled personal communication, allowing people to connect and share updates with selected individuals.
+* Social media platforms made it easier to have an online persona and communicate with friends. But these have become too centralized and have strayed from their original missions.
+* I enjoy sending and receiving intentional updates through email newsletters to a curated list of friends and family. This is more authentic and personal than social media posts, which are visible to all friends and remain permanently accessible.
+* I want to create a platform where people can subscribe to their friends' lives and send out intentional updates at chosen intervals. I envision a system where users can easily manage who receives their updates, similar to Google Circles, but without giving new subscribers access to previous newsletters.
+* I aim to fix social media by creating a decentralized platform that allows users to share their authentic selves. The platform will be different from newsletter services like Substack, which are more focused on publishing and monetizing content for writers.
+
+Differences from Substack
+Focus:
+- My product: Primarily focused on personal updates and sharing life experiences with a selected group of friends and family.
+- Substack: Geared towards writers and creators who want to publish and monetize content, often with a broader audience in mind.
+Audience Control:
+- My product: Users have tight control over their audience, choosing who can subscribe and receive updates.
+- Substack: While writers can control access to their content, the platform is designed for growing a wide subscriber base.
+Monetization:
+- My product: Not designed for monetization; the emphasis is on personal sharing rather than earning revenue.
+- Substack: Provides tools for writers to monetize their newsletters through subscriptions and paid content.
+Content Discovery:
+- My product: Less emphasis on content discovery; the platform is more about private sharing within a known network.
+- Substack: Offers discovery features to help writers reach new audiences and grow their subscriber base.
+Interactivity:
+- My product: May offer limited interactivity, focusing on the simplicity of receiving updates.
+- Substack: Provides features for reader engagement, such as comments and likes, enhancing interactivity.
+Distribution:
+- My product: Primarily uses email for distributing updates directly to a curated list of subscribers.
+- Substack: Uses email as well but also leverages its platform for wider distribution and visibility.
+Privacy:
+- My product: Emphasizes privacy and control, allowing users to share updates with a select group.
+- Substack: While offering privacy settings, the platform is more public-facing, aiming to connect writers with a broader audience.
+Purpose:
+- My product: Designed for personal use, to maintain connections with close contacts.
+- Substack: Aimed at professional or semi-professional content creators looking to build a following and potentially earn income.
+
+MVP (Minimum Viable Product):
+* User registration and login using email.
+* Basic profile setup with name, profile picture, and bio.
+* Ability to create and share text-based updates.
+* Simple subscriber management: users can subscribe to other users and manage their own subscribers.
+* Basic privacy settings: users can choose who can see their updates (e.g., public, subscribers only).
+* A straightforward home feed displaying updates from subscribed users.
+
+I'm looking to create a simplified newsletter platform called Syndicate, which differs from Substack by focusing on personal newsletters sent to a user's chosen group of subscribers. Unlike Substack, Syndicate will not have a public feed of updates or a discovery page for finding new users. Instead, users can search for someone by username to view their profile and subscribe to their newsletters. Newsletters are intended to go directly to the subscribers' inboxes, emphasizing privacy and personal communication. The platform will allow users to write newsletters and send them to selected groups or individual subscribers.
+
+Tentative plan
+
+Home Page
+Path: src/pages/dashboard/home.jsx
+Purpose: To serve as the landing page where users can log in or sign up.
+Components:
+WelcomeBanner: A component that introduces Syndicate and its unique features.
+SignUpButton: A button for new users to create an account.
+LogInButton: A button for existing users to log in.
+
+Profile Page
+Path: src/pages/dashboard/profile.jsx
+Purpose: To allow users to view and edit their profile information.
+Components:
+ProfileForm: A form for updating profile details such as name, bio, and profile picture.
+
+Newsletter Creation Page
+Path: src/pages/dashboard/notifications.jsx (rename to create-newsletter.jsx)
+Purpose: To provide a space for users to compose and send newsletters.
+Components:
+NewsletterEditor: A rich text editor for composing newsletters.
+RecipientSelector: A component to select individual subscribers or groups to receive the newsletter.
+SendButton: A button to send the newsletter to the chosen recipients.
+
+Subscriber Management Page
+Path: src/pages/dashboard/tables.jsx (rename to manage-subscribers.jsx)
+Purpose: To manage subscribers and organize them into groups.
+Components:
+SubscriberList: A list displaying all subscribers with options to add them to groups or remove them.
+GroupManager: A component to create, edit, and assign subscribers to groups.
+InviteSubscriber: A feature to invite new subscribers via email.
+
+User Search Page
+Path: src/pages/dashboard/search.jsx
+Purpose: To search for users by username and view their profiles to subscribe.
+Components:
+SearchBar: An input field to search for users by username.
+UserProfileCard: A simple card displaying user's public profile information with a subscribe button.
+Navigation Components
+Path: src/widgets/layout/navbar.jsx and src/widgets/layout/sidenav.jsx
+Purpose: To navigate between different parts of the application.
+Components:
+Navbar: A top navigation bar with links to the newsletter creation page and subscriber management page.
+Sidenav: A side navigation menu with the same links as the Navbar.
+
+Technical Considerations
+State Management: Consider using React Context or a state management library to handle user data and groupings.
+API Integration: Prepare for backend integration to handle user profiles, newsletter creation, and subscriber management.
+Routing: Use React Router to manage navigation and protect routes for authenticated users.
+
+directory tree without node modules
+/Users/james/Developer/syndicate
+├── CHANGELOG.md
+├── ISSUE_TEMPLATE.md
+├── LICENSE
+├── README.md
+├── directory_tree.txt
+├── index.html
+├── jsconfig.json
+├── package-lock.json
+├── package.json
+├── postcss.config.cjs
+├── prettier.config.cjs
+├── public
+│   ├── css
+│   │   └── tailwind.css
+│   └── img
+│       ├── background-image.png
+│       ├── bruce-mars.jpeg
+│       ├── devto.svg
+│       ├── favicon.png
+│       ├── github.svg
+│       ├── home-decor-1.jpeg
+│       ├── home-decor-2.jpeg
+│       ├── home-decor-3.jpeg
+│       ├── home-decor-4.jpeg
+│       ├── logo-asana.svg
+│       ├── logo-atlassian.svg
+│       ├── logo-ct-dark.png
+│       ├── logo-ct.png
+│       ├── logo-invision.svg
+│       ├── logo-jira.svg
+│       ├── logo-slack.svg
+│       ├── logo-spotify.svg
+│       ├── logo-xd.svg
+│       ├── pattern.png
+│       ├── team-1.jpeg
+│       ├── team-2.jpeg
+│       ├── team-3.jpeg
+│       ├── team-4.jpeg
+│       └── twitter-logo.svg
+├── src
+│   ├── App.jsx
+│   ├── configs
+│   │   ├── charts-config.js
+│   │   └── index.js
+│   ├── context
+│   │   └── index.jsx
+│   ├── data
+│   │   ├── authors-table-data.js
+│   │   ├── conversations-data.js
+│   │   ├── index.js
+│   │   ├── orders-overview-data.js
+│   │   ├── platform-settings-data.js
+│   │   ├── projects-data.js
+│   │   ├── projects-table-data.js
+│   │   ├── statistics-cards-data.js
+│   │   └── statistics-charts-data.js
+│   ├── layouts
+│   │   ├── auth.jsx
+│   │   ├── dashboard.jsx
+│   │   └── index.js
+│   ├── main.jsx
+│   ├── pages
+│   │   ├── auth
+│   │   │   ├── index.js
+│   │   │   ├── sign-in.jsx
+│   │   │   └── sign-up.jsx
+│   │   └── dashboard
+│   │       ├── home.jsx
+│   │       ├── index.js
+│   │       ├── newsletter.jsx
+│   │       ├── notifications.jsx
+│   │       ├── profile.jsx
+│   │       ├── search.jsx
+│   │       ├── subscribers.jsx
+│   │       └── tables.jsx
+│   ├── routes.jsx
+│   └── widgets
+│       ├── cards
+│       │   ├── index.js
+│       │   ├── message-card.jsx
+│       │   ├── profile-info-card.jsx
+│       │   └── statistics-card.jsx
+│       ├── charts
+│       │   ├── index.js
+│       │   └── statistics-chart.jsx
+│       └── layout
+│           ├── configurator.jsx
+│           ├── dashboard-navbar.jsx
+│           ├── footer.jsx
+│           ├── index.js
+│           ├── navbar.jsx
+│           └── sidenav.jsx
+├── tailwind.config.cjs
+├── vite.config.js
+└── wm.txt

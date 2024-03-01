@@ -1,0 +1,98 @@
+/Users/james/Developer/syndicate
+├── CHANGELOG.md
+├── ISSUE_TEMPLATE.md
+├── LICENSE
+├── README.md
+├── directory_tree.txt
+├── index.html
+├── jsconfig.json
+├── package-lock.json
+├── package.json
+├── postcss.config.cjs
+├── prettier.config.cjs
+├── public
+│   ├── css
+│   │   └── tailwind.css
+│   └── img
+│       ├── background-image.png
+│       ├── bruce-mars.jpeg
+│       ├── devto.svg
+│       ├── favicon.png
+│       ├── github.svg
+│       ├── home-decor-1.jpeg
+│       ├── home-decor-2.jpeg
+│       ├── home-decor-3.jpeg
+│       ├── home-decor-4.jpeg
+│       ├── logo-asana.svg
+│       ├── logo-atlassian.svg
+│       ├── logo-ct-dark.png
+│       ├── logo-ct.png
+│       ├── logo-invision.svg
+│       ├── logo-jira.svg
+│       ├── logo-slack.svg
+│       ├── logo-spotify.svg
+│       ├── logo-xd.svg
+│       ├── pattern.png
+│       ├── team-1.jpeg
+│       ├── team-2.jpeg
+│       ├── team-3.jpeg
+│       ├── team-4.jpeg
+│       └── twitter-logo.svg
+├── src
+│   ├── App.jsx
+│   ├── configs
+│   │   ├── charts-config.js
+│   │   └── index.js
+│   ├── context
+│   │   └── index.jsx
+│   ├── data
+│   │   ├── authors-table-data.js
+│   │   ├── conversations-data.js
+│   │   ├── index.js
+│   │   ├── orders-overview-data.js
+│   │   ├── platform-settings-data.js
+│   │   ├── projects-data.js
+│   │   ├── projects-table-data.js
+│   │   ├── statistics-cards-data.js
+│   │   └── statistics-charts-data.js
+│   ├── layouts
+│   │   ├── auth.jsx
+│   │   ├── dashboard.jsx
+│   │   └── index.js
+│   ├── main.jsx
+│   ├── pages
+│   │   ├── auth
+│   │   │   ├── index.js
+│   │   │   ├── sign-in.jsx
+│   │   │   └── sign-up.jsx
+│   │   └── dashboard
+│   │       ├── home.jsx
+│   │       ├── index.js
+│   │       ├── newsletter.jsx
+│   │       ├── notifications.jsx
+│   │       ├── profile.jsx
+│   │       ├── search.jsx
+│   │       ├── subscribers.jsx
+│   │       └── tables.jsx
+│   ├── routes.jsx
+│   └── widgets
+│       ├── cards
+│       │   ├── index.js
+│       │   ├── message-card.jsx
+│       │   ├── profile-info-card.jsx
+│       │   └── statistics-card.jsx
+│       ├── charts
+│       │   ├── index.js
+│       │   └── statistics-chart.jsx
+│       └── layout
+│           ├── configurator.jsx
+│           ├── dashboard-navbar.jsx
+│           ├── footer.jsx
+│           ├── index.js
+│           ├── navbar.jsx
+│           └── sidenav.jsx
+├── tailwind.config.cjs
+├── vite.config.js
+└── wm.txt
+
+16 directories, 80 files
