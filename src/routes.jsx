@@ -1,12 +1,6 @@
-import {
-  HomeIcon,
-  UserCircleIcon,
-  TableCellsIcon,
-  InformationCircleIcon,
-  ServerStackIcon,
-  RectangleStackIcon,
-} from "@heroicons/react/24/solid";
-import { Home, Profile, Newsletter, Subscribers, Search, Tables } from "@/pages/dashboard";
+// routes.jsx
+import { HomeIcon, UserCircleIcon, ServerStackIcon, RectangleStackIcon } from "@heroicons/react/24/solid";
+import { Home, Profile, Newsletter, Subscribers, Search, Tables, Audience } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -34,6 +28,13 @@ export const routes = [
         name: "newsletter",
         path: "/newsletter",
         element: <Newsletter />,
+        children: [
+          {
+            path: "audience", // This will result in the path "/newsletter/audience"
+            name: "audience",
+            element: <Audience />,
+          },
+        ],
       },
       {
         icon: <UserCircleIcon {...icon} />,
@@ -48,21 +49,15 @@ export const routes = [
         element: <Search />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <UserCircleIcon {...icon} />,
         name: "tables",
         path: "/tables",
         element: <Tables />,
       },
-      // {
-      //   icon: <InformationCircleIcon {...icon} />,
-      //   name: "notifications",
-      //   path: "/notifications",
-      //   element: <Notifications />,
-      // },
     ],
   },
   {
-    title: "auth pages",
+    title: "About",
     layout: "auth",
     pages: [
       {

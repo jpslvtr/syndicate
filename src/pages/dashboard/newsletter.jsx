@@ -1,15 +1,31 @@
+import {
+  ArrowUpIcon, EllipsisVerticalIcon, CheckCircleIcon, ClockIcon, ChatBubbleLeftEllipsisIcon,
+  Cog6ToothIcon, HomeIcon, PencilIcon, UsersIcon, PaperAirplaneIcon
+} from "@heroicons/react/24/solid";
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Card, CardBody, Button } from "@material-tailwind/react";
-import { UsersIcon, PaperAirplaneIcon } from "@heroicons/react/24/solid"; 
+import {
+  Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, Progress, Switch,
+  Tabs, TabsHeader, Tab, Tooltip, Typography, IconButton, Menu, MenuHandler,
+  MenuList, MenuItem
+} from "@material-tailwind/react";
+import { Link } from "react-router-dom";
+import { StatisticsCard, ProfileInfoCard, MessageCard } from "@/widgets/cards";
+import { StatisticsChart } from "@/widgets/charts";
+import {
+  authorsTableData, platformSettingsData, projectsData, projectsTableData,
+  conversationsData, statisticsCardsData, statisticsChartsData, ordersOverviewData
+} from "@/data";
 import AudienceSelector from '../../helper/AudienceSelector';
+import { useNavigate } from "react-router-dom";
 
 export function Newsletter() {
   const [newsletterContent, setNewsletterContent] = useState('');
   const [recipients, setRecipients] = useState([]);
   const [showSelector, setShowSelector] = useState(false);
-
+  const navigate = useNavigate(); 
+  
   const sendNewsletter = () => {
     // Logic to send the newsletter
     console.log('Sending newsletter to:', recipients);
@@ -20,66 +36,58 @@ export function Newsletter() {
   };
 
   const selectAudience = () => {
-    setShowSelector(!showSelector);
+    navigate('/dashboard/newsletter/audience');
   };
 
-  const editorStyles = {
-    height: '500px',
-  };
-
-  // Add a container style to position the AudienceSelector absolutely
-  const containerStyle = {
-    position: 'relative', // This makes it the reference for the absolutely positioned AudienceSelector
-    zIndex: 1, // Ensure the container is above other elements
-  };
-
-    // Add a style for the AudienceSelector to position it absolutely
-    const audienceSelectorStyle = {
-      position: 'absolute',
-      top: '100%', // Position it right below the button
-      left: 0,
-      right: 0,
-      zIndex: 2, // Higher z-index so it's above the textbox
-    };  
-  
-    return (
-      <div className="p-4">
-        <Card>
-          <CardBody className="flex flex-col gap-4">
-            <div className="text-lg font-semibold">Create Newsletter</div>
-            <div className="flex w-full">
-              <Button
-                color="black"
-                className="flex-grow" // Use flex-grow for the "Select Audience" button to take up more space
-                onClick={selectAudience}
+  return (
+    <div className="mt-12">
+      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <Card className="overflow-hidden xl:col-span-3 border border-blue-gray-100 shadow-sm">
+          <CardHeader
+            floated={false}
+            shadow={false}
+            color="transparent"
+            className="m-0 flex items-center justify-between p-6"
+          >
+            <div>
+              <Typography variant="h6" color="blue-gray" className="mb-1">
+                Newsletter
+              </Typography>
+              <Typography
+                variant="small"
+                className="flex items-center gap-1 font-normal text-blue-gray-600"
               >
-                <UsersIcon className="w-4 h-4 mr-2" />
-                Select Audience
-              </Button>
-              <Button
-                color="black"
-                className="flex-none ml-2" // Use flex-none for the "Send" button to not grow and add margin-left for spacing
-                onClick={sendNewsletter}
-              >
-                <PaperAirplaneIcon className="w-4 h-4 mr-2" />
-                Send
-              </Button>
+              </Typography>
             </div>
-            {showSelector && <AudienceSelector onSelectionChange={handleRecipientsChange} />}
-            <div style={{ width: '100%' }}>
-              <ReactQuill
-                theme="snow"
-                value={newsletterContent}
-                onChange={setNewsletterContent}
-                style={{ height: '500px' }}
-              />
+          </CardHeader>
+          <CardBody className="overflow-x-scroll px-0 pt-0 pb-2 flex items-center">
+            <div className="flex flex-col items-start w-full pl-4"> {/* Adjusted for left alignment and added padding-left */}
+              <div style={{ width: '75%', paddingBottom: '75px' }}> {/* Added paddingBottom */}
+                <ReactQuill
+                  theme="snow"
+                  value={newsletterContent}
+                  onChange={setNewsletterContent}
+                  style={{ height: '500px' }}
+                />
+              </div>
+              <div className="flex w-3/4 justify-start mb-4"> {/* Adjusted for button alignment */}
+                <Button
+                  color="black"
+                  className="flex-grow"
+                  onClick={selectAudience}
+                >
+                  <PaperAirplaneIcon className="w-4 h-4 mr-2" />
+                  Choose Audience
+                </Button>
+              </div>
+              <br />
+              {showSelector && <AudienceSelector onSelectionChange={handleRecipientsChange} />}
             </div>
           </CardBody>
         </Card>
       </div>
-    );
-  }
-  
-  export default Newsletter;
-  
-  
+    </div>
+  );
+}
+
+export default Newsletter;

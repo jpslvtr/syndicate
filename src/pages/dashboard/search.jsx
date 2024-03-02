@@ -1,9 +1,30 @@
-import React, { useState } from 'react';
-import { Input, Button, List, ListItem } from '@material-tailwind/react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import {
+  Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, Progress, Switch,
+  Tabs, TabsHeader, Tab, Tooltip, Typography, IconButton, Menu, MenuHandler,
+  MenuList, MenuItem, List, ListItem, Input
+} from "@material-tailwind/react";
+import {
+  ArrowUpIcon, EllipsisVerticalIcon, CheckCircleIcon, ClockIcon, ChatBubbleLeftEllipsisIcon,
+  Cog6ToothIcon, HomeIcon, PencilIcon, UsersIcon, PaperAirplaneIcon
+} from "@heroicons/react/24/solid";
+import { EllipsisVerticalIcon as EllipsisVerticalOutlineIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
+import { StatisticsCard, ProfileInfoCard, MessageCard } from "@/widgets/cards";
+import { StatisticsChart } from "@/widgets/charts";
+import {
+  authorsTableData, platformSettingsData, projectsData, projectsTableData,
+  conversationsData, statisticsCardsData, statisticsChartsData, ordersOverviewData
+} from "@/data";
+import AudienceSelector from '../../helper/AudienceSelector';
 
 export function Search() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const location = useLocation();
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -14,28 +35,64 @@ export function Search() {
     // Perform the search using the searchQuery state
     // For example, filter the subscribers list or make an API call
     // Update the searchResults state with the results
+    setSearchResults([{ id: 1, email: "user@example.com", group: "Group A" }]);
   };
 
+  // Extract the search query from the URL when the component mounts and perform the search
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const query = searchParams.get('query');
+    if (query) {
+      performSearch(query);
+    }
+  }, [location]);
+
   return (
-    <div className="search-container">
-      <br/>
-      <form onSubmit={performSearch}>
-        <Input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          placeholder="Search Users..."
-        />
-        <br/>
-        <Button type="submit">Search</Button>
-      </form>
-      <List>
-        {searchResults.map((result) => (
-          <ListItem key={result.id}>
-            {result.email} - {result.group}
-          </ListItem>
-        ))}
-      </List>
+    <div className="mt-12">
+      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <Card className="overflow-hidden xl:col-span-3 border border-blue-gray-100 shadow-sm">
+          <CardHeader
+            floated={false}
+            shadow={false}
+            color="transparent"
+            className="m-0 flex items-center justify-between p-6"
+          >
+            <div>
+              <Typography variant="h6" color="blue-gray" className="mb-1">
+                Search
+              </Typography>
+              <Typography
+                variant="small"
+                className="flex items-center gap-1 font-normal text-blue-gray-600"
+              >
+              </Typography>
+            </div>
+          </CardHeader>
+          <CardBody className="overflow-x-scroll px-0 pt-0 pb-2 flex items-center">
+            <div className="flex flex-col items-start w-full pl-4"> {/* Adjusted for left alignment and added padding-left */}
+              <div className="flex w-3/4 justify-start mb-4"> {/* Adjusted for button alignment */}
+                <form onSubmit={performSearch}>
+                  <Input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    placeholder="Search Users..."
+                  />
+                  <br />
+                  <Button type="submit">Search</Button>
+                </form>
+                <List>
+                  {searchResults.map((result) => (
+                    <ListItem key={result.id}>
+                      {result.email} - {result.group}
+                    </ListItem>
+                  ))}
+                </List>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      </div>
     </div>
   );
 }
