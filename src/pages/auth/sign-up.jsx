@@ -19,7 +19,16 @@ export function SignUp() {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Create a user document in Firestore using the UID as the document ID
+      await setDoc(doc(db, 'users', user.uid), {
+        userId: user.uid,
+        name: email.split('@')[0], // Use part of the email as the name or prompt for a real name
+        groupId: 'group_a', // Assign a default group or based on user input
+      });
+
       navigate('/dashboard/home');
     } catch (error) {
       switch (error.code) {
@@ -35,10 +44,20 @@ export function SignUp() {
     }
   };
 
+
   const handleGoogleSignUp = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
+
+      // Create a user document in Firestore using the UID as the document ID
+      await setDoc(doc(db, 'users', user.uid), {
+        userId: user.uid,
+        name: user.displayName || user.email.split('@')[0], // Use the Google profile name or part of the email
+        groupId: 'group_a', // Assign a default group or based on user input
+      });
+
       navigate('/dashboard/home');
     } catch (error) {
       setError(error.message);

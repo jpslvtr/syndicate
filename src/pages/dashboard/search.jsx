@@ -49,7 +49,7 @@ export function Search() {
 
   return (
     <div className="mt-12">
-      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
+      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3" style={{ width: '75%' }}>
         <Card className="overflow-hidden xl:col-span-3 border border-blue-gray-100 shadow-sm">
           <CardHeader
             floated={false}
