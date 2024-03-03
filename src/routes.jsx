@@ -1,6 +1,6 @@
 // routes.jsx
 import { HomeIcon, UserCircleIcon, ServerStackIcon, RectangleStackIcon } from "@heroicons/react/24/solid";
-import { Home, Profile, Newsletter, Subscribers, Search, Tables, Audience } from "@/pages/dashboard";
+import { Home, Profile, Newsletter, Subscribers, Search, Audience } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -47,12 +47,6 @@ export const routes = [
         name: "search",
         path: "/search",
         element: <Search />,
-      },
-      {
-        icon: <UserCircleIcon {...icon} />,
-        name: "tables",
-        path: "/tables",
-        element: <Tables />,
       },
     ],
   },

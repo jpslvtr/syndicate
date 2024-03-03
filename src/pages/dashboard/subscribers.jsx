@@ -1,67 +1,96 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../../firebase-config'; // Adjust the path as necessary
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebase-config';
+import { collection, doc, getDoc, query, where, getDocs } from 'firebase/firestore';
 import { Card, CardBody, Typography } from "@material-tailwind/react";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase-config';
 
 export function Subscribers() {
-  const [groups, setGroups] = useState([]);
+  const [user] = useAuthState(auth);
+  const [following, setFollowing] = useState([]);
+  const [followers, setFollowers] = useState([]);
 
   useEffect(() => {
-    const fetchGroupsAndUsers = async () => {
-      const groupsSnapshot = await getDocs(collection(db, 'groups'));
-      const groupsData = await Promise.all(groupsSnapshot.docs.map(async (doc) => {
-        const group = { ...doc.data(), id: doc.id };
-        const usersQuery = query(collection(db, 'users'), where('groupId', '==', group.groupId));
-        const usersSnapshot = await getDocs(usersQuery);
-        const users = usersSnapshot.docs.map(userDoc => userDoc.data());
-        return { ...group, users };
+    const fetchUserDetails = async (userIds) => {
+      const userDetails = await Promise.all(userIds.map(async (userId) => {
+        const userDoc = await getDoc(doc(db, 'users', userId));
+        return userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null;
       }));
-      setGroups(groupsData);
+      return userDetails.filter(user => user !== null);
     };
 
-    fetchGroupsAndUsers();
-  }, []);
+    const fetchUserData = async () => {
+      if (user) {
+        // Use the email to query the user document instead of the auth UID
+        const q = query(collection(db, 'users'), where('email', '==', user.email));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          // Assuming the first document is the correct user
+          const userData = querySnapshot.docs[0].data();
+          const userDocId = querySnapshot.docs[0].id;
+          const followingData = await fetchUserDetails(userData.following || []);
+          const followersData = await fetchUserDetails(userData.followers || []);
+          setFollowing(followingData);
+          setFollowers(followersData);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   return (
     <div className="mt-12">
       <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
-        {/* Left card occupying 2/3 of the space */}
-        <Card className="overflow-hidden xl:col-span-2 border border-blue-gray-100 shadow-sm">
-          <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
-            {groups.map(group => (
-              <div key={group.groupId} className="mb-4">
-                <Typography variant="h6" color="blue-gray" className="mb-2 px-6 pt-6">{group.groupName}</Typography>
-                <table className="w-full min-w-[640px] table-auto">
-                  <thead>
-                    <tr>
-                      <th className="border-b border-blue-gray-50 py-3 px-5 text-left">
-                        <Typography variant="small" className="text-[11px] font-bold uppercase text-blue-gray-400">Name</Typography>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-5 text-left">
-                        <Typography variant="small" className="text-[11px] font-bold uppercase text-blue-gray-400">Group Name</Typography>
-                      </th>
+        <div className="xl:col-span-2">
+          {/* Followers Table */}
+          <Card>
+            <CardBody>
+              <Typography variant="h5" className="mb-4">Followers</Typography>
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: 'left', width: '50%' }}>Name</th>
+                    <th style={{ textAlign: 'left', width: '50%' }}>Public ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {followers.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.name}</td>
+                      <td>{user.uidPublic}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {group.users.map((user, index) => (
-                      <tr key={index}>
-                        <td className="py-3 px-5">{user.name || user.email}</td>
-                        <td className="py-3 px-5">{group.groupName}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ))}
-          </CardBody>
-        </Card>
+                  ))}
+                </tbody>
+              </table>
+            </CardBody>
+          </Card>
+        </div>
 
-        {/* Right card remaining empty */}
-        <Card className="xl:col-span-1 border border-blue-gray-100 shadow-sm">
-          {/* Content for the right card if needed */}
-        </Card>
+        {/* Empty right card occupying 1/3 of the space */}
+          {/* Following Table */}
+          <Card>
+            <CardBody>
+              <Typography variant="h5" className="mb-4">Following</Typography>
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: 'left', width: '50%' }}>Name</th>
+                    <th style={{ textAlign: 'left', width: '50%' }}>Public ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {following.map((user) => (
+                    <tr key={user.id}>
+                      <td>{user.name}</td>
+                      <td>{user.uidPublic}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CardBody>
+          </Card>
       </div>
     </div>
   );
 }
-

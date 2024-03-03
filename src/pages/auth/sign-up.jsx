@@ -2,13 +2,32 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from '../../firebase-config';
 import { useNavigate } from 'react-router-dom';
-import {
-  Input,
-  Checkbox,
-  Button,
-  Typography,
-} from "@material-tailwind/react";
+import { Input, Checkbox, Button, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import { db } from '../../firebase-config';
+import { doc, setDoc } from 'firebase/firestore';
+
+const generateHash = (userId) => {
+  // Define an array of allowed ASCII character codes based on the specified ranges
+  const allowedCharCodes = [
+    33, ...Array.from({ length: (38 - 35 + 1) }, (_, i) => i + 35),
+    ...Array.from({ length: (43 - 42 + 1) }, (_, i) => i + 42),
+    45, ...Array.from({ length: (57 - 48 + 1) }, (_, i) => i + 48),
+    ...Array.from({ length: (91 - 59 + 1) }, (_, i) => i + 59),
+    ...Array.from({ length: (95 - 93 + 1) }, (_, i) => i + 93),
+    ...Array.from({ length: (126 - 98 + 1) }, (_, i) => i + 98),
+  ];
+
+  let hash = '';
+  for (let i = 0; i < 4; i++) {
+    // Use the userId to generate an index for the allowedCharCodes array
+    const charCode = userId.charCodeAt(i % userId.length);
+    const index = charCode % allowedCharCodes.length;
+    const hashCharCode = allowedCharCodes[index];
+    hash += String.fromCharCode(hashCharCode);
+  }
+  return hash;
+};
 
 export function SignUp() {
   const [email, setEmail] = useState('');
@@ -21,12 +40,14 @@ export function SignUp() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      const uidPublic = generateHash(user.uid); // Generate the hash for uidPublic
 
       // Create a user document in Firestore using the UID as the document ID
       await setDoc(doc(db, 'users', user.uid), {
         userId: user.uid,
         name: email.split('@')[0], // Use part of the email as the name or prompt for a real name
-        groupId: 'group_a', // Assign a default group or based on user input
+        groupId: null,
+        uidPublic, // Include the generated hash
       });
 
       navigate('/dashboard/home');
@@ -50,12 +71,14 @@ export function SignUp() {
     try {
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
+      const uidPublic = generateHash(user.uid); // Generate the hash for uidPublic
 
       // Create a user document in Firestore using the UID as the document ID
       await setDoc(doc(db, 'users', user.uid), {
         userId: user.uid,
         name: user.displayName || user.email.split('@')[0], // Use the Google profile name or part of the email
-        groupId: 'group_a', // Assign a default group or based on user input
+        groupId: null,
+        uidPublic, // Include the generated hash
       });
 
       navigate('/dashboard/home');
