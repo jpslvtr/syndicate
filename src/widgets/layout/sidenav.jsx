@@ -62,7 +62,9 @@ export function Sidenav({ brandImg, brandName, routes }) {
             )}
             {pages.map(({ icon, name, path }) => (
               <li key={name}>
-                <NavLink to={`/${layout}${path}`}>
+                <NavLink to={`/${layout}${path}`}
+                  className={name === "sign in" || name === "sign up" ? "pointer-events-none" : ""}
+                >
                   {({ isActive }) => (
                     <Button
                       variant={isActive ? "gradient" : "text"}
@@ -73,7 +75,8 @@ export function Sidenav({ brandImg, brandName, routes }) {
                           ? "white"
                           : "blue-gray"
                       }
-                      className="flex items-center gap-4 px-4 capitalize"
+                      className={`flex items-center gap-4 px-4 capitalize ${name === "sign in" || name === "sign up" ? "invisible pointer-events-none" : ""
+                        }`}
                       fullWidth
                     >
                       {icon}

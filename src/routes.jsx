@@ -1,6 +1,6 @@
 // routes.jsx
 import { HomeIcon, UserCircleIcon, ServerStackIcon, RectangleStackIcon, MagnifyingGlassIcon, UserGroupIcon, MapIcon } from "@heroicons/react/24/solid";
-import { Home, Profile, Subscribers, Search } from "@/pages/dashboard";
+import { Home, Profile, Subscribers, Search, Overview } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -9,6 +9,7 @@ const icon = {
 
 export const routes = [
   {
+    title: "Dashboard",
     layout: "dashboard",
     pages: [
       {
@@ -39,23 +40,29 @@ export const routes = [
   },
   {
     title: "About",
-    layout: "auth",
+    layout: "dashboard",
     pages: [
-      // {
-      //   icon: <ServerStackIcon {...icon} />,
-      //   name: "sign in",
-      //   path: "/sign-in",
-      //   element: <SignIn />,
-      // },
-      // {
-      //   icon: <RectangleStackIcon {...icon} />,
-      //   name: "sign up",
-      //   path: "/sign-up",
-      //   element: <SignUp />,
-      // },
       {
         icon: <MapIcon {...icon} />,
         name: "overview",
+        path: "/overview",
+        element: <Overview />,
+      }
+    ],
+  },
+  {
+    // title: "Auth",
+    layout: "auth",
+    pages: [
+      {
+        icon: <ServerStackIcon {...icon} />,
+        name: "sign in",
+        path: "/sign-in",
+        element: <SignIn />,
+      },
+      {
+        icon: <RectangleStackIcon {...icon} />,
+        name: "sign up",
         path: "/sign-up",
         element: <SignUp />,
       }
@@ -64,3 +71,4 @@ export const routes = [
 ];
 
 export default routes;
+
