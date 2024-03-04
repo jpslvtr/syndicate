@@ -108,7 +108,7 @@ export function DashboardNavbar() {
           </Breadcrumbs>
         </div>
         <div className="flex items-center">
-          <div className="relative mr-auto md:mr-4 md:w-56">
+          {/* <div className="relative mr-auto md:mr-4 md:w-56">
             <Input
               label="Search"
               value={searchQuery}
@@ -117,7 +117,6 @@ export function DashboardNavbar() {
             />
             {showDropdown && (
               <div ref={dropdownRef} className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg">
-                {/* Optionally render individual search results here */}
                 <div className="py-1">
                   <button
                     onClick={handleViewAllResults}
@@ -128,7 +127,7 @@ export function DashboardNavbar() {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
           <IconButton
             variant="text"
             color="blue-gray"

@@ -20,6 +20,7 @@ import {
   conversationsData, statisticsCardsData, statisticsChartsData, ordersOverviewData
 } from "@/data";
 import AudienceSelector from '../../helper/AudienceSelector';
+import { ArrowRightIcon as ArrowNarrowRightIcon, ArrowLeftIcon as ArrowNarrowLeftIcon } from '@heroicons/react/24/outline';
 
 export function Search() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,8 +50,9 @@ export function Search() {
 
   return (
     <div className="mt-12">
-      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3" style={{ width: '75%' }}>
-        <Card className="overflow-hidden xl:col-span-3 border border-blue-gray-100 shadow-sm">
+      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <Card className="overflow-hidden xl:col-span-2 border border-blue-gray-100 shadow-sm">
+
           <CardHeader
             floated={false}
             shadow={false}
@@ -58,9 +60,7 @@ export function Search() {
             className="m-0 flex items-center justify-between p-6"
           >
             <div>
-              <Typography variant="h6" color="blue-gray" className="mb-1">
-                Search
-              </Typography>
+              <Typography variant="h5" className="mb-4">Groups</Typography>
               <Typography
                 variant="small"
                 className="flex items-center gap-1 font-normal text-blue-gray-600"
@@ -70,16 +70,20 @@ export function Search() {
           </CardHeader>
           <CardBody className="overflow-x-scroll px-0 pt-0 pb-2 flex items-center">
             <div className="flex flex-col items-start w-full pl-4"> {/* Adjusted for left alignment and added padding-left */}
-              <div className="flex w-3/4 justify-start mb-4"> {/* Adjusted for button alignment */}
+              <div className="flex w-3/4 justify-start mb-4">
                 <form onSubmit={performSearch}>
                   <Input
                     type="text"
                     value={searchQuery}
                     onChange={handleSearchChange}
                     placeholder="Search Users..."
+                    style={{ width: '500px' }}
                   />
                   <br />
-                  <Button type="submit">Search</Button>
+                  <Button type="submit" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    Search
+                    <ArrowNarrowRightIcon className="h-5 w-5 ml-2" style={{ marginLeft: '8px' }} />
+                  </Button>
                 </form>
                 <List>
                   {searchResults.map((result) => (

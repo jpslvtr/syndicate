@@ -1,6 +1,6 @@
 // routes.jsx
-import { HomeIcon, UserCircleIcon, ServerStackIcon, RectangleStackIcon } from "@heroicons/react/24/solid";
-import { Home, Profile, Subscribers, Search, Audience } from "@/pages/dashboard";
+import { HomeIcon, UserCircleIcon, ServerStackIcon, RectangleStackIcon, MagnifyingGlassIcon, UserGroupIcon, MapIcon } from "@heroicons/react/24/solid";
+import { Home, Profile, Subscribers, Search } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -24,13 +24,13 @@ export const routes = [
         element: <Profile />,
       },
       {
-        icon: <UserCircleIcon {...icon} />,
+        icon: <UserGroupIcon {...icon} />,
         name: "subscribers",
         path: "/subscribers",
         element: <Subscribers />,
       },
       {
-        icon: <UserCircleIcon {...icon} />,
+        icon: <MagnifyingGlassIcon {...icon} />,
         name: "search",
         path: "/search",
         element: <Search />,
@@ -41,18 +41,24 @@ export const routes = [
     title: "About",
     layout: "auth",
     pages: [
+      // {
+      //   icon: <ServerStackIcon {...icon} />,
+      //   name: "sign in",
+      //   path: "/sign-in",
+      //   element: <SignIn />,
+      // },
+      // {
+      //   icon: <RectangleStackIcon {...icon} />,
+      //   name: "sign up",
+      //   path: "/sign-up",
+      //   element: <SignUp />,
+      // },
       {
-        icon: <ServerStackIcon {...icon} />,
-        name: "sign in",
-        path: "/sign-in",
-        element: <SignIn />,
-      },
-      {
-        icon: <RectangleStackIcon {...icon} />,
-        name: "sign up",
+        icon: <MapIcon {...icon} />,
+        name: "overview",
         path: "/sign-up",
         element: <SignUp />,
-      },
+      }
     ],
   },
 ];

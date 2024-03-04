@@ -233,9 +233,7 @@ export function Home() {
               className="m-0 flex items-center justify-between p-6"
             >
               <div>
-                <Typography variant="h6" color="blue-gray" className="mb-1">
-                  Groups
-                </Typography>
+                  <Typography variant="h5" className="mb-4">Groups</Typography>
               </div>
             </CardHeader>
               <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">

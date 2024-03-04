@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, doc, getDoc, query, where, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, query, where, getDocs, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { Card, CardBody, Typography, Input, Button } from "@material-tailwind/react";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { db, auth } from '../../../firebase-config';
@@ -17,36 +17,40 @@ export function Subscribers() {
     setDropdownVisible(dropdownVisible === userId ? null : userId);
   };
 
-
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
 
-    // Perform the search directly here
     const results = followers.filter((follower) =>
       follower.name.toLowerCase().includes(query.toLowerCase())
     );
 
-    // Update the searchResults state with the filtered results
     setSearchResults(results);
   };
 
   const performSearch = (e) => {
     e.preventDefault();
-    // Filter the followers list based on the search query
     const results = followers.filter((follower) =>
       follower.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    // Update the searchResults state with the filtered results
     setSearchResults(results);
   };
 
-  
   useEffect(() => {
     const fetchUserDetails = async (userIds) => {
       const userDetails = await Promise.all(userIds.map(async (userId) => {
         const userDoc = await getDoc(doc(db, 'users', userId));
-        return userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null;
+        const userData = userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null;
+
+        if (userData) {
+          // Fetch group memberships for each user
+          const groupQuery = query(collection(db, 'groups'), where('members', 'array-contains', userId));
+          const groupSnapshot = await getDocs(groupQuery);
+          const userGroups = groupSnapshot.docs.map(groupDoc => groupDoc.id);
+          userData.groups = userGroups;
+        }
+
+        return userData;
       }));
       return userDetails.filter(user => user !== null);
     };
@@ -57,15 +61,13 @@ export function Subscribers() {
         try {
           const q = query(collection(db, 'groups'), where('userId', '==', userIdH));
           const querySnapshot = await getDocs(q);
-          console.log("Query snapshot for groups:", querySnapshot); // Log 2
           if (querySnapshot.empty) {
-            console.log("No groups found for user ID:", userIdH); // Log if no groups are found
+            console.log("No groups found for user ID:", userIdH);
           } else {
             const groupsData = querySnapshot.docs.map(doc => ({
               id: doc.id,
               ...doc.data()
             }));
-            console.log("Fetched groups data:", groupsData); // Log the fetched groups data
             setGroups(groupsData);
           }
         } catch (error) {
@@ -77,7 +79,6 @@ export function Subscribers() {
     const fetchUserData = async () => {
       if (user) {
         try {
-          // Fetch followers
           const q = query(collection(db, 'users'), where('email', '==', user.email));
           const querySnapshot = await getDocs(q);
           if (!querySnapshot.empty) {
@@ -87,7 +88,6 @@ export function Subscribers() {
             setFollowers(uniqueFollowers);
           }
 
-          // Fetch groups
           await fetchGroupsData();
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -98,11 +98,54 @@ export function Subscribers() {
     fetchUserData();
   }, [user]);
 
+  const handleGroupMembershipChange = async (userId, groupId, isChecked) => {
+    const userRef = doc(db, 'users', userId);
+    const groupRef = doc(db, 'groups', groupId);
+
+    if (isChecked) {
+      await updateDoc(userRef, {
+        groups: arrayUnion(groupId)
+      });
+      await updateDoc(groupRef, {
+        members: arrayUnion(userId)
+      });
+    } else {
+      await updateDoc(userRef, {
+        groups: arrayRemove(groupId)
+      });
+      await updateDoc(groupRef, {
+        members: arrayRemove(userId)
+      });
+    }
+
+    // Update the followers state to reflect the changes
+    setFollowers(followers.map(follower => {
+      if (follower.id === userId) {
+        return {
+          ...follower,
+          groups: isChecked ? [...(follower.groups || []), groupId] : (follower.groups || []).filter(id => id !== groupId)
+        };
+      }
+      return follower;
+    }));
+
+    // Update the groups state to reflect the changes
+    setGroups(groups.map(group => {
+      if (group.id === groupId) {
+        return {
+          ...group,
+          members: isChecked ? [...(group.members || []), userId] : (group.members || []).filter(id => id !== userId)
+        };
+      }
+      return group;
+    }));
+  };
+
 
   return (
     <div className="mt-12">
-      <div className="flex mb-4 gap-6"> {/* Modified this line to use flex */}
-        <div className="w-3/5"> 
+      <div className="flex mb-4 gap-6">
+        <div className="w-3/5">
           <Card className="overflow-y-auto h-[600px] border border-blue-gray-100 shadow-sm">
             <CardBody>
               <Typography variant="h5" className="mb-4">Followers</Typography>
@@ -120,6 +163,7 @@ export function Subscribers() {
                   </form>
                 </div>
               </div>
+
               <table className="w-full min-w-[640px] table-auto">
                 <thead>
                   <tr>
@@ -155,22 +199,26 @@ export function Subscribers() {
                         </Typography>
                       </td>
                       <td className="py-3 px-5 border-b border-blue-gray-50 relative">
-                        {/* Dropdown Button */}
                         <button
                           className="text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center"
                           onClick={() => handleDropdown(user.id)}
                         >
                           <AdjustmentsHorizontalIcon className="h-5 w-5" />
                         </button>
-                        {/* Dropdown Menu */}
                         {dropdownVisible === user.id && (
-                          <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                          <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                              <label className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                                <input type="checkbox" className="form-checkbox" />
-                                <span className="ml-3">Option with checkbox</span>
-                              </label>
-                              {/* ... other menu items */}
+                              {groups.map(group => (
+                                <label key={group.id} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                                  <input
+                                    type="checkbox"
+                                    className="form-checkbox"
+                                    checked={(user.groups || []).includes(group.id)}
+                                    onChange={(e) => handleGroupMembershipChange(user.id, group.id, e.target.checked)}
+                                  />
+                                  <span className="ml-3">{group.groupName}</span>
+                                </label>
+                              ))}
                             </div>
                           </div>
                         )}
@@ -185,7 +233,10 @@ export function Subscribers() {
         <div className="flex-1" style={{ maxWidth: '500px', marginRight: '40px' }}>
           <Card className="border border-blue-gray-100 shadow-sm">
             <CardBody>
-              <Typography variant="h5" className="mb-4">Groups</Typography>
+              <div className="flex justify-between items-center mb-4">
+                <Typography variant="h5">Groups</Typography>
+                <Button className="text-xs">+ Add Group</Button>
+              </div>
               <table className="w-full">
                 <thead>
                   <tr>
@@ -211,8 +262,7 @@ export function Subscribers() {
                       </td>
                       <td className="py-3 px-5 border-b border-blue-gray-50">
                         <Typography variant="small" color="blue-gray">
-                          {/* Assuming you want to display members here */}
-                          {/* {group.members.join(', ')} */}
+                          {group.members ? group.members.length : 0}
                         </Typography>
                       </td>
                     </tr>
@@ -221,12 +271,11 @@ export function Subscribers() {
               </table>
             </CardBody>
           </Card>
-
         </div>
+
       </div>
     </div>
   );
 }
 
 export default Subscribers;
-
