@@ -1,254 +1,277 @@
-// React imports
-import React, { useState, useEffect } from 'react';
-
-// Firebase imports
+import React, { useEffect, useState, useRef } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '../../firebase-config';
-import { collection, doc, getDoc, updateDoc, query, where, getDocs } from 'firebase/firestore';
-
-// Material Tailwind components
-import {
-  Avatar,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Chip,
-  IconButton,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Progress,
-  Switch,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Tooltip,
-  Typography,
-} from "@material-tailwind/react";
-
-// Heroicons
-import {
-  HomeIcon,
-  ChatBubbleLeftEllipsisIcon,
-  Cog6ToothIcon,
-  PencilIcon,
-} from "@heroicons/react/24/solid";
-
-// React Router DOM
-import { Link } from "react-router-dom";
-
-// Local data and widgets
-import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
-import { platformSettingsData, conversationsData, projectsData } from "@/data";
+import { collection, query, where, getDoc, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { auth, db } from '../../../firebase-config';
+import { Card, CardBody, CardHeader, CardFooter, Avatar, Typography, Tabs, TabsHeader, Tab, Switch, Tooltip, Button, } from "@material-tailwind/react";
+import { HomeIcon, ChatBubbleLeftEllipsisIcon, Cog6ToothIcon, PencilIcon, } from "@heroicons/react/24/solid";
+import { ProfileInfoCard } from "@/widgets/cards";
 
 export function Profile() {
-  const [user] = useAuthState(auth);
-  const [profileData, setProfileData] = useState({ name: '', uidPublic: '', bio: '' });
-  const [bio, setBio] = useState('');
-  const [isEditingBio, setIsEditingBio] = useState(false);
-  
+  const [user, loading, error] = useAuthState(auth);
+  const [profileData, setProfileData] = useState({ name: '', uidPublic: '', email: '', bio: '', mobile: '', location: '' });
+  const [editMode, setEditMode] = useState({ bio: false, mobile: false, location: false });
+  const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
+  const inputRef = useRef(null); // Create a ref for the input
+  const textareaRef = useRef(null); // Create a ref for the textarea
+  const avatarPath = profileData.photo ? profileData.photo.replace('syndicate/public', '') : '';
+  const [following, setFollowing] = useState([]);
+
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchFollowing = async () => {
       if (user) {
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        if (userDocSnap.exists()) {
-          setBio(userDocSnap.data().bio || '');
+        const q = query(collection(db, 'users'), where('email', '==', user.email));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          const followingIds = userData.following || [];
+          const followingData = await Promise.all(followingIds.map(async (userId) => {
+            const userDoc = await getDoc(doc(db, 'users', userId));
+            return userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null;
+          }));
+          setFollowing(followingData.filter(user => user !== null));
         }
       }
     };
 
-    fetchUserData();
+    fetchFollowing();
   }, [user]);
 
-  const handleBioUpdate = async (newBio) => {
-    if (user) {
-      const userDocRef = doc(db, 'users', user.uid);
-      await updateDoc(userDocRef, { bio: newBio });
-      setBio(newBio); // Update local state
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (loading) return;
+      if (error) {
+        console.error("Firebase auth error", error);
+        return;
+      }
+      if (user) {
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('email', '==', user.email));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          setProfileData({
+            name: userData.name,
+            uidPublic: userData.uidPublic,
+            email: userData.email,
+            bio: userData.bio,
+            mobile: userData.mobile,
+            location: userData.location,
+            photo: userData.photo ? userData.photo.replace('syndicate/public', '') : ''
+          });
+        }
+      }
+    };
+
+    fetchProfileData();
+  }, [user, loading, error]);
+
+
+
+  const handleEdit = (field) => {
+    setEditMode({ ...editMode, [field]: !editMode[field] });
+  };
+
+  const handleSave = async (field, value) => {
+    try {
+      // Step 1: Query for the user document by email
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('email', '==', user.email)); // Assuming `user.email` contains the user's email
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Assuming there's only one document for each email
+        const userDoc = querySnapshot.docs[0];
+        const userDocRef = userDoc.ref;
+
+        // Step 2: Update the document
+        await updateDoc(userDocRef, {
+          [field]: value,
+        });
+
+        console.log("Document successfully updated");
+        setShowSaveConfirmation(true); // Show confirmation message
+        setTimeout(() => setShowSaveConfirmation(false), 3000); // Hide after 3 seconds
+      } else {
+        console.log("No document found with the given email");
+      }
+    } catch (error) {
+      console.error("Error updating document:", error);
     }
   };
 
-  // Define the action for the Tooltip to toggle the editing mode
-  const editAction = (
-    <Tooltip content="Edit Profile">
-      <PencilIcon
-        className="h-4 w-4 cursor-pointer text-blue-gray-500"
-        onClick={() => setIsEditing(!isEditing)}
-      />
-    </Tooltip>
-  );
-
+  const renderEditableField = (field, value) => {
+    const isBio = field === 'bio';
+    return editMode[field] ? (
+      <div className="flex items-start justify-between">
+        {isBio ? (
+          <textarea
+            ref={textareaRef} // Use the ref here
+            value={value}
+            onChange={(e) => setProfileData({ ...profileData, [field]: e.target.value })}
+            autoFocus
+            onBlur={() => handleEdit(field)}
+            className="w-full resize-none border rounded-md p-2 h-36" 
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSave(field, profileData[field]);
+                handleEdit(field); // Toggle edit mode off
+                textareaRef.current?.blur(); // Remove focus
+              }
+            }}
+          />
+        ) : (
+          <input
+            ref={inputRef} // Use the ref here
+            type="text"
+            value={value}
+            onChange={(e) => setProfileData({ ...profileData, [field]: e.target.value })}
+            autoFocus
+            onBlur={() => handleEdit(field)}
+            className="border rounded-md p-2 w-full"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSave(field, profileData[field]);
+                handleEdit(field); // Toggle edit mode off
+                inputRef.current?.blur(); // Remove focus
+              }
+            }}
+          />
+        )}
+        <button onClick={() => handleSave(field, profileData[field])} className="ml-2 text-sm bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Save</button>
+      </div>
+    ) : (
+      <div className="flex justify-between items-start w-full">
+        <span className="flex-1">{value || 'Not set'}</span>
+        <PencilIcon onClick={() => handleEdit(field)} className="h-5 w-5 cursor-pointer text-blue-gray-500" />
+      </div>
+    );
+  };
 
   return (
     <>
-      <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover	bg-center">
+      <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover bg-center">
         <div className="absolute inset-0 h-full w-full bg-gray-900/75" />
       </div>
       <Card className="mx-3 -mt-16 mb-6 lg:mx-4 border border-blue-gray-100">
-        <CardBody className="p-4">
-          <div className="mb-10 flex items-center justify-between flex-wrap gap-6">
-            <div className="flex items-center gap-6">
-              <Avatar
-                src="/img/bruce-mars.jpeg"
-                alt="bruce-mars"
-                size="xl"
-                variant="rounded"
-                className="rounded-lg shadow-lg shadow-blue-gray-500/40"
-              />
-              <div>
-                <Typography variant="h5" color="blue-gray" className="mb-1">
-                  {profileData.name} {/* Display the user's name */}
-                </Typography>
-                <Typography variant="small" className="font-normal text-blue-gray-600">
-                  {profileData.uidPublic} {/* Display the user's public ID */}
-                </Typography>
+        <CardBody className="flex p-4">
+          <div className="flex-1">
+            <div className="mb-10 flex items-center justify-between flex-wrap gap-6">
+              <div className="flex items-center gap-6">
+                <Avatar
+                  src={avatarPath}
+                  alt="profile-picture"
+                  size="xl"
+                  variant="rounded"
+                  className="rounded-lg shadow-lg shadow-blue-gray-500/40"
+                />
+                <div>
+                  <Typography variant="h5" color="blue-gray" className="mb-1">
+                    {profileData.name}
+                  </Typography>
+                  <Typography
+                    variant="small"
+                    className="font-normal text-blue-gray-600"
+                  >
+                    <b>Code</b>: {profileData.uidPublic}
+                  </Typography>
+                </div>
               </div>
             </div>
-            <div className="w-96">
-              <Tabs value="app">
-                <TabsHeader>
-                  <Tab value="app">
-                    <HomeIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                    App
-                  </Tab>
-                  <Tab value="message">
-                    <ChatBubbleLeftEllipsisIcon className="-mt-0.5 mr-2 inline-block h-5 w-5" />
-                    Message
-                  </Tab>
-                  <Tab value="settings">
-                    <Cog6ToothIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                    Settings
-                  </Tab>
-                </TabsHeader>
-              </Tabs>
-            </div>
-          </div>
-          <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3">
-            <ProfileInfoCard
-              title="Profile Information"
-              description={
-                isEditingBio ? (
-                  <input
-                    type="text"
-                    value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                    onBlur={async () => {
-                      if (user) {
-                        const userDocRef = doc(db, 'users', user.uid);
-                        await updateDoc(userDocRef, { bio: bio });
-                        setIsEditingBio(false); // Exit editing mode after update
-                      }
-                    }}
-                    autoFocus
-                  />
-                ) : (
-                  <p>{bio}</p> // Display the bio text when not editing
-                )
-              }
-              action={
-                <Tooltip content="Edit Profile">
-                  <PencilIcon
-                    className="h-4 w-4 cursor-pointer text-blue-gray-500"
-                    onClick={() => setIsEditingBio(true)} // Enter editing mode
-                  />
-                </Tooltip>
-              }
-            />
-            <div>
-              <Typography variant="h6" color="blue-gray" className="mb-3">
-                Platform Settings
-              </Typography>
-              <ul className="flex flex-col gap-6">
-                {conversationsData.map((props) => (
-                  <MessageCard
-                    key={props.name}
-                    {...props}
-                    action={
-                      <Button variant="text" size="sm">
-                        reply
-                      </Button>
-                    }
-                  />
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="px-4 pb-4">
-            <Typography variant="h6" color="blue-gray" className="mb-2">
-              Projects
-            </Typography>
-            <Typography
-              variant="small"
-              className="font-normal text-blue-gray-500"
-            >
-              Architects design houses
-            </Typography>
-            <div className="mt-6 grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-4">
-              {projectsData.map(
-                ({ img, title, description, tag, route, members }) => (
-                  <Card key={title} color="transparent" shadow={false}>
-                    <CardHeader
-                      floated={false}
-                      color="gray"
-                      className="mx-0 mt-0 mb-4 h-64 xl:h-40"
-                    >
-                      <img
-                        src={img}
-                        alt={title}
-                        className="h-full w-full object-cover"
-                      />
-                    </CardHeader>
-                    <CardBody className="py-0 px-1">
-                      <Typography
-                        variant="small"
-                        className="font-normal text-blue-gray-500"
+            <div className="grid-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3 w-full">
+              <table className="w-full min-w-[640px] table-auto">
+                <thead>
+                  <tr>
+                    {["Field", "Value"].map((el) => (
+                      <th
+                        key={el}
+                        className="border-b border-blue-gray-50 py-3 px-6 text-left"
                       >
-                        {tag}
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        color="blue-gray"
-                        className="mt-1 mb-2"
-                      >
-                        {title}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-blue-gray-500"
-                      >
-                        {description}
-                      </Typography>
-                    </CardBody>
-                    <CardFooter className="mt-6 flex items-center justify-between py-0 px-1">
-                      <Link to={route}>
-                        <Button variant="outlined" size="sm">
-                          view project
-                        </Button>
-                      </Link>
-                      <div>
-                        {members.map(({ img, name }, key) => (
-                          <Tooltip key={name} content={name}>
-                            <Avatar
-                              src={img}
-                              alt={name}
-                              size="xs"
-                              variant="circular"
-                              className={`cursor-pointer border-2 border-white ${
-                                key === 0 ? "" : "-ml-2.5"
-                              }`}
-                            />
-                          </Tooltip>
-                        ))}
+                        <Typography
+                          variant="small"
+                          className="text-[11px] font-medium uppercase text-blue-gray-400"
+                        >
+                          {el}
+                        </Typography>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="py-3 px-5 w-1/3">About Me</td>
+                    <td className="py-3 px-5 w-2/3">{renderEditableField('bio', profileData.bio)}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 px-5">Email</td>
+                    <td className="py-3 px-5">{profileData.email}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 px-5">Mobile</td>
+                    <td className="py-3 px-5">{renderEditableField('mobile', profileData.mobile)}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 px-5">Location</td>
+                    <td className="py-3 px-5">{renderEditableField('location', profileData.location)}</td>
+                  </tr>
+                  <tr>
+                    <td className="py-3 px-5">Social</td>
+                    <td className="py-3 px-5">
+                      <div className="flex items-center gap-4">
+                        <i className="fa-brands fa-facebook text-blue-700" />
+                        <i className="fa-brands fa-twitter text-blue-400" />
+                        <i className="fa-brands fa-instagram text-purple-500" />
                       </div>
-                    </CardFooter>
-                  </Card>
-                )
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {showSaveConfirmation && (
+                <div className="text-sm text-green-500">Changes saved successfully!</div>
               )}
             </div>
+          </div>
+          <div className="flex-1" style={{ maxWidth: '500px', marginLeft: 'auto', marginRight: '25px' }}>
+            <Card className="border border-blue-gray-100 shadow-sm">
+              <CardBody>
+                <Typography variant="h5" className="mb-4">Following</Typography>
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                        <Typography variant="small" className="text-[11px] font-medium uppercase text-blue-gray-400">
+                          Name
+                        </Typography>
+                      </th>
+                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
+                        <Typography variant="small" className="text-[11px] font-medium uppercase text-blue-gray-400">
+                          Public ID
+                        </Typography>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {following.map((user) => (
+                      <tr key={user.id}>
+                        <td className="py-3 px-5 border-b border-blue-gray-50">
+                          <Typography variant="small" color="blue-gray">
+                            {user.name}
+                          </Typography>
+                        </td>
+                        <td className="py-3 px-5 border-b border-blue-gray-50">
+                          <Typography variant="small" color="blue-gray">
+                            {user.uidPublic}
+                          </Typography>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </CardBody>
+            </Card>
           </div>
         </CardBody>
       </Card>
@@ -257,3 +280,4 @@ export function Profile() {
 }
 
 export default Profile;
+

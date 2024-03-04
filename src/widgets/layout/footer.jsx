@@ -5,8 +5,15 @@ import { HeartIcon } from "@heroicons/react/24/solid";
 export function Footer({ brandName, brandLink, routes }) {
   const year = new Date().getFullYear();
 
+  const footerStyle = {
+    position: 'fixed',
+    bottom: 10,
+    width: '100%',
+    zIndex: 1000, // Ensure it stays on top of other content
+  };
+
   return (
-    <footer className="py-2">
+    <footer style={footerStyle} className="py-2">
       <div className="flex w-full flex-wrap items-center justify-center gap-6 px-2 md:justify-between">
         <Typography variant="small" className="font-normal text-inherit">
           &copy; {year}

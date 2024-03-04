@@ -1,7 +1,7 @@
-import { db } from '../firebase-config.js';
+import { db } from '../../firebase-config.js';
 import { collection, addDoc, doc, updateDoc, query, where, getDocs } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../firebase-config.js';
+import { auth } from '../../firebase-config.js';
 
 const registerUserWithAuth = async (email, password) => {
     try {

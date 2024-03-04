@@ -1,4 +1,4 @@
-import { db } from '../firebase-config.js'; // Adjust the path as necessary
+import { db } from '../../firebase-config.js';
 import { collection, getDocs } from 'firebase/firestore';
 
 // Function to fetch and log documents from a Firestore collection

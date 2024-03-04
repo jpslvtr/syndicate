@@ -3,7 +3,7 @@ import { Navbar, Typography, Button, IconButton, Breadcrumbs, Input, Menu, MenuH
 import { useMaterialTailwindController, setOpenConfigurator, setOpenSidenav, } from "@/context";
 import React, { useState, useRef, useEffect } from 'react'; // Import useRef and useEffect
 import { signOut } from "firebase/auth";
-import { auth } from '../../firebase-config'; // Adjust the path as necessary
+import { auth } from '../../../firebase-config';
 
 const handleSignOut = async () => {
   try {

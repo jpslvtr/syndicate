@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 
-export function ProfileInfoCard({ title, description, details, action }) {
+export function ProfileInfoCard({ title, bio, details, action }) {
   return (
     <Card color="transparent" shadow={false}>
       <CardHeader
@@ -21,15 +21,15 @@ export function ProfileInfoCard({ title, description, details, action }) {
         {action}
       </CardHeader>
       <CardBody className="p-0">
-        {description && (
+        {bio && (
           <Typography
             variant="small"
             className="font-normal text-blue-gray-500"
           >
-            {description}
+            {bio}
           </Typography>
         )}
-        {description && details ? (
+        {bio && details ? (
           <hr className="my-8 border-blue-gray-50" />
         ) : null}
         {details && (
@@ -64,13 +64,13 @@ export function ProfileInfoCard({ title, description, details, action }) {
 
 ProfileInfoCard.defaultProps = {
   action: null,
-  description: null,
+  bio: null,
   details: {},
 };
 
 ProfileInfoCard.propTypes = {
   title: PropTypes.string.isRequired,
-  description: PropTypes.node,
+  bio: PropTypes.node,
   details: PropTypes.object,
 };
 

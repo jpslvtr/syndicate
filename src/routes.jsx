@@ -1,6 +1,6 @@
 // routes.jsx
 import { HomeIcon, UserCircleIcon, ServerStackIcon, RectangleStackIcon } from "@heroicons/react/24/solid";
-import { Home, Profile, Newsletter, Subscribers, Search, Audience } from "@/pages/dashboard";
+import { Home, Profile, Subscribers, Search, Audience } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 
 const icon = {
@@ -22,19 +22,6 @@ export const routes = [
         name: "profile",
         path: "/profile",
         element: <Profile />,
-      },
-      {
-        icon: <UserCircleIcon {...icon} />,
-        name: "newsletter",
-        path: "/newsletter",
-        element: <Newsletter />,
-        children: [
-          {
-            path: "audience", // This will result in the path "/newsletter/audience"
-            name: "audience",
-            element: <Audience />,
-          },
-        ],
       },
       {
         icon: <UserCircleIcon {...icon} />,

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from '../../firebase-config';
+import { auth } from '../../../firebase-config';
 import { useNavigate } from 'react-router-dom';
 import { Input, Checkbox, Button, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
-import { db } from '../../firebase-config';
+import { db } from '../../../firebase-config';
 import { doc, setDoc } from 'firebase/firestore';
 
 const generateHash = (userId) => {

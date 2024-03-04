@@ -7,11 +7,7 @@
     return (
       <Routes>
         <Route path="/dashboard/*" element={<Dashboard />}>
-          <Route path="newsletter" element={<Newsletter />}>
-            <Route path="audience" element={<Audience />} />
-          </Route>
-          {/* Define other nested routes within Dashboard as needed */}
-        </Route>
+        </Route>  
         <Route path="/auth/*" element={<Auth />} />
         <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
       </Routes>
