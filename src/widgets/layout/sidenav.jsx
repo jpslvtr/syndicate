@@ -28,12 +28,12 @@ export function Sidenav({ brandImg, brandName, routes }) {
         className={`relative`}
       >
         <Link to="/" className="py-6 px-8 text-center">
-          <Typography
-            variant="h6"
-            color={sidenavType === "dark" ? "white" : "blue-gray"}
-          >
-            {brandName}
-          </Typography>
+          <img
+            src="/img/synlogo.jpg"
+            alt="Syndicate Logo"
+            style={{ width: '70%', height: 'auto', marginLeft: '30px', marginTop: '10px', marginBottom: '-10px' }}
+            className="mb-4"
+          />
         </Link>
         <IconButton
           variant="text"
@@ -109,6 +109,6 @@ Sidenav.propTypes = {
   routes: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-Sidenav.displayName = "/src/widgets/layout/sidnave.jsx";
+Sidenav.displayName = "/src/widgets/layout/sidenav.jsx";
 
 export default Sidenav;

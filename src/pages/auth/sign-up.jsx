@@ -89,13 +89,21 @@ export function SignUp() {
 
   return (
     <section className="m-8 flex">
-      <div className="w-2/5 h-full hidden lg:block">
+      <div className="w-2/5 h-full hidden lg:block relative"> {/* Add relative positioning here */}
         <img
           src="/img/pattern.png"
           className="h-full w-full object-cover rounded-3xl"
         />
+        <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center" style={{ width: '75%', margin: '0 auto', fontFamily: 'Roboto, sans-serif' }}>
+          <span className="text-white text-xl">
+            Syndicate is a private newsletter platform for individuals seeking a more meaningful and private way to communicate with their circles.
+            <br /><br />
+            Substack enabled content creators to scale their newsletters. Syndicate empowers individuals to deepen their relationships through intentional communication.
+          </span>
+        </div>
       </div>
       <div className="w-full lg:w-3/5 flex flex-col items-center justify-center">
+
         <div className="text-center">
           <Typography variant="h2" className="font-bold mb-4">Join Us Today</Typography>
           <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and password to register.</Typography>

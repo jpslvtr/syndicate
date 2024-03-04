@@ -146,7 +146,7 @@ export function Profile() {
     ) : (
       <div className="flex justify-between items-start w-full">
         <span className="flex-1">{value || 'Not set'}</span>
-        <PencilIcon onClick={() => handleEdit(field)} className="h-5 w-5 cursor-pointer text-blue-gray-500" />
+          <PencilIcon onClick={() => handleEdit(field)} className="h-5 w-5 cursor-pointer text-blue-gray-500" style={{ marginLeft: '5px' }} />
       </div>
     );
   };

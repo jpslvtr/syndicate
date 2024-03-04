@@ -107,6 +107,7 @@ export function Home() {
             const groupsQuery = query(groupsRef, where('userId', '==', userDocId));
             const groupsSnapshot = await getDocs(groupsQuery);
             const groupsData = groupsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          
             setGroups(groupsData);
           } else {
             console.log('No user document found with the email:', user.email);
@@ -280,7 +281,10 @@ export function Home() {
                     </tr>
                   </thead>
                   <tbody>
-                    {(selectedGroup === 'All users' ? users : groupMembers).map((member, index) => (
+                    {(selectedGroup === 'All users' ? users : 
+                    groupMembers)
+                    .filter(member => member.id !== '2F6uNbw9o4hjAzNgy5I3')
+                    .map((member, index) => (
                       <tr key={member.id || index}>
                         <td className={`py-3 px-5 ${index === (selectedGroup === 'All users' ? users : groupMembers).length - 1 ? "" : "border-b border-blue-gray-50"}`}>
                           <div className="flex items-center gap-4">
