@@ -1,22 +1,12 @@
-import {
-  ArrowUpIcon, EllipsisVerticalIcon, CheckCircleIcon, ClockIcon, ChatBubbleLeftEllipsisIcon,
-  Cog6ToothIcon, HomeIcon, PencilIcon, UsersIcon, PaperAirplaneIcon
-} from "@heroicons/react/24/solid";
+import { ArrowUpIcon, EllipsisVerticalIcon, CheckCircleIcon, ClockIcon, ChatBubbleLeftEllipsisIcon, Cog6ToothIcon, HomeIcon, PencilIcon, UsersIcon, PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import {
-  Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, Progress, Switch,
-  Tabs, TabsHeader, Tab, Tooltip, Typography, IconButton, Menu, MenuHandler,
-  MenuList, MenuItem
-} from "@material-tailwind/react";
+import { Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, Progress, Switch, Tabs, TabsHeader, Tab, Tooltip, Typography, IconButton, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { StatisticsCard, ProfileInfoCard, MessageCard } from "@/widgets/cards";
 import { StatisticsChart } from "@/widgets/charts";
-import {
-  authorsTableData, platformSettingsData, projectsData, projectsTableData,
-  conversationsData, statisticsCardsData, statisticsChartsData, ordersOverviewData
-} from "@/data";
+import { authorsTableData, platformSettingsData, projectsData, projectsTableData, conversationsData, statisticsCardsData, statisticsChartsData, ordersOverviewData } from "@/data";
 import AudienceSelector from '../../helper/AudienceSelector';
 import { useNavigate } from "react-router-dom";
 

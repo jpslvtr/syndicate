@@ -2,23 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import {
-  Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, Progress, Switch,
-  Tabs, TabsHeader, Tab, Tooltip, Typography, IconButton, Menu, MenuHandler,
-  MenuList, MenuItem, List, ListItem, Input
-} from "@material-tailwind/react";
-import {
-  ArrowUpIcon, EllipsisVerticalIcon, CheckCircleIcon, ClockIcon, ChatBubbleLeftEllipsisIcon,
-  Cog6ToothIcon, HomeIcon, PencilIcon, UsersIcon, PaperAirplaneIcon
-} from "@heroicons/react/24/solid";
+import { Avatar, Button, Card, CardBody, CardFooter, CardHeader, Chip, Progress, Switch, Tabs, TabsHeader, Tab, Tooltip, Typography, IconButton, Menu, MenuHandler, MenuList, MenuItem, List, ListItem, Input } from "@material-tailwind/react";
+import { ArrowUpIcon, EllipsisVerticalIcon, CheckCircleIcon, ClockIcon, ChatBubbleLeftEllipsisIcon, Cog6ToothIcon, HomeIcon, PencilIcon, UsersIcon, PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import { EllipsisVerticalIcon as EllipsisVerticalOutlineIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { StatisticsCard, ProfileInfoCard, MessageCard } from "@/widgets/cards";
 import { StatisticsChart } from "@/widgets/charts";
-import {
-  authorsTableData, platformSettingsData, projectsData, projectsTableData,
-  conversationsData, statisticsCardsData, statisticsChartsData, ordersOverviewData
-} from "@/data";
+import { authorsTableData, platformSettingsData, projectsData, projectsTableData, conversationsData, statisticsCardsData, statisticsChartsData, ordersOverviewData } from "@/data";
 import AudienceSelector from '../../helper/AudienceSelector';
 import { ArrowRightIcon as ArrowNarrowRightIcon, ArrowLeftIcon as ArrowNarrowLeftIcon } from '@heroicons/react/24/outline';
 
@@ -76,7 +66,7 @@ export function Search() {
                     type="text"
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    placeholder="Search by email"
+                    placeholder="Search by email or code"
                     style={{ width: '500px' }}
                   />
                   <br />

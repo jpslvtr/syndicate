@@ -230,7 +230,7 @@ export function Profile() {
                 </tbody>
               </table>
               {showSaveConfirmation && (
-                <div className="text-sm text-green-500">Changes saved successfully!</div>
+                <div className="text-sm text-green-500" style={{ marginLeft: '250px', marginTop: '-50px'}}>Changes saved successfully!</div>
               )}
             </div>
           </div>
@@ -248,7 +248,7 @@ export function Profile() {
                       </th>
                       <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
                         <Typography variant="small" className="text-[11px] font-medium uppercase text-blue-gray-400">
-                          Public ID
+                          Code
                         </Typography>
                       </th>
                     </tr>

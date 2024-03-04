@@ -13,7 +13,6 @@ const registerUserWithAuth = async (email, password) => {
     }
 };
 
-// Function to generate a 4-character hash from the userId
 const generateHash = (userId) => {
     // Define an array of allowed ASCII character codes based on the specified ranges
     const allowedCharCodes = [
@@ -43,7 +42,6 @@ const createUser = async (email, name) => {
         return null; // Stop if the user couldn't be registered
     }
 
-    // Create a new user document in Firestore with the uidPublic
     await addDoc(collection(db, 'users'), {
         email,
         name,

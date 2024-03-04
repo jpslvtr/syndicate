@@ -1,10 +1,5 @@
-import PropTypes from "prop-types";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Typography,
-} from "@material-tailwind/react";
+import PropTypes from "prop-types"; 
+import { Card, CardHeader, CardBody, Typography, } from "@material-tailwind/react";
 
 export function ProfileInfoCard({ title, bio, details, action }) {
   return (

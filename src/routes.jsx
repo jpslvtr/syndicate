@@ -1,4 +1,3 @@
-// routes.jsx
 import { HomeIcon, UserCircleIcon, ServerStackIcon, RectangleStackIcon, MagnifyingGlassIcon, UserGroupIcon, MapIcon } from "@heroicons/react/24/solid";
 import { Home, Profile, Subscribers, Search, Overview } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";

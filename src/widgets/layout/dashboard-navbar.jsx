@@ -1,14 +1,13 @@
 import { useLocation, Link, useNavigate } from "react-router-dom"; 
 import { Navbar, Typography, Button, IconButton, Breadcrumbs, Input, Menu, MenuHandler, MenuList, MenuItem, Avatar, } from "@material-tailwind/react"; import { UserCircleIcon, Cog6ToothIcon, BellIcon, ClockIcon, CreditCardIcon, Bars3Icon, } from "@heroicons/react/24/solid"; 
 import { useMaterialTailwindController, setOpenConfigurator, setOpenSidenav, } from "@/context";
-import React, { useState, useRef, useEffect } from 'react'; // Import useRef and useEffect
+import React, { useState, useRef, useEffect } from 'react';
 import { signOut } from "firebase/auth";
 import { auth } from '../../../firebase-config';
 
 const handleSignOut = async () => {
   try {
     await signOut(auth);
-    // Handle post-sign-out logic, like navigating to the sign-in page
   } catch (error) {
     console.error("Error signing out:", error);
   }

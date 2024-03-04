@@ -1,7 +1,6 @@
 import { db } from '../../firebase-config.js';
 import { collection, getDocs } from 'firebase/firestore';
 
-// Function to fetch and log documents from a Firestore collection
 const logCollectionDocuments = async (collectionName) => {
     const collectionRef = collection(db, collectionName);
     const snapshot = await getDocs(collectionRef);
@@ -12,9 +11,8 @@ const logCollectionDocuments = async (collectionName) => {
     });
 };
 
-// Function to log documents from multiple collections
 const logDocumentsFromCollections = async () => {
-    const collectionNames = ['users', 'groups']; // Specify your collection names here
+    const collectionNames = ['users', 'groups'];
     for (const collectionName of collectionNames) {
         await logCollectionDocuments(collectionName);
     }

@@ -1,4 +1,3 @@
-// initFollowers.js
 import { db } from '../../firebase-config.js';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 

@@ -1,5 +1,4 @@
 function generateHash(uid) {
-    // Define an array of allowed ASCII character codes based on the specified ranges
     const allowedCharCodes = [
         33, ...Array.from({ length: (38 - 35 + 1) }, (_, i) => i + 35),
         ...Array.from({ length: (43 - 42 + 1) }, (_, i) => i + 42),
@@ -18,7 +17,6 @@ function generateHash(uid) {
     }
     console.log(hash)
 }
-
 
 const uid = "hQQZ6v88iroSDf4OlG3i";
 

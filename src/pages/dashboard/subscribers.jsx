@@ -40,6 +40,7 @@ export function Subscribers() {
     const fetchUserDetails = async (userIds) => {
       const userDetails = await Promise.all(userIds.map(async (userId) => {
         const userDoc = await getDoc(doc(db, 'users', userId));
+        console.log(`User Doc for userId ${userId}:`, userDoc.exists() ? userDoc.data() : 'Not found');
         const userData = userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null;
 
         if (userData) {
@@ -47,12 +48,18 @@ export function Subscribers() {
           const groupQuery = query(collection(db, 'groups'), where('members', 'array-contains', userId));
           const groupSnapshot = await getDocs(groupQuery);
           const userGroups = groupSnapshot.docs.map(groupDoc => groupDoc.id);
+          console.log(`Groups for userId ${userId}:`, userGroups);
+
+
           userData.groups = userGroups;
         }
 
         return userData;
       }));
-      return userDetails.filter(user => user !== null);
+      console.log('User Details before filtering:', userDetails);
+      // return userDetails.filter(user => user !== null);
+      return userDetails; // This will include all users, even if some are null
+
     };
 
     const fetchGroupsData = async () => {
@@ -68,6 +75,7 @@ export function Subscribers() {
               id: doc.id,
               ...doc.data()
             }));
+            console.log('Fetched Groups Data:', groupsData);
             setGroups(groupsData);
           }
         } catch (error) {
@@ -83,8 +91,13 @@ export function Subscribers() {
           const querySnapshot = await getDocs(q);
           if (!querySnapshot.empty) {
             const userData = querySnapshot.docs[0].data();
+            console.log('Fetched User Data:', userData);
             const followersData = await fetchUserDetails(userData.followers || []);
-            const uniqueFollowers = followersData.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
+            console.log('Followers Data before unique filter:', followersData);
+            const uniqueFollowers = followersData.filter((v, i, a) =>
+              v !== null && a.findIndex(t => t !== null && t.id === v.id) === i
+            );
+            console.log('Unique Followers:', uniqueFollowers);
             setFollowers(uniqueFollowers);
           }
 
@@ -139,6 +152,8 @@ export function Subscribers() {
       }
       return group;
     }));
+    console.log('Updated Followers after group change:', followers);
+    console.log('Updated Groups after group change:', groups);
   };
 
 

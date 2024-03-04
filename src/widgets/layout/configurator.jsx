@@ -1,19 +1,7 @@
 import React from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  Button,
-  IconButton,
-  Switch,
-  Typography,
-  Chip,
-} from "@material-tailwind/react";
-import {
-  useMaterialTailwindController,
-  setOpenConfigurator,
-  setSidenavColor,
-  setSidenavType,
-  setFixedNavbar,
-} from "@/context";
+import { Button, IconButton, Switch, Typography, Chip, } from "@material-tailwind/react"; 
+import { useMaterialTailwindController, setOpenConfigurator, setSidenavColor, setSidenavType, setFixedNavbar, } from "@/context";
 
 function formatNumber(number, decPlaces) {
   decPlaces = Math.pow(10, decPlaces);
