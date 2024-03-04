@@ -1,11 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import {
-  ChartPieIcon,
-  UserIcon,
-  UserPlusIcon,
-  ArrowRightOnRectangleIcon,
-} from "@heroicons/react/24/solid";
-import { Navbar, Footer } from "@/widgets/layout";
+import { ChartPieIcon, UserIcon, UserPlusIcon, ArrowRightOnRectangleIcon, } from "@heroicons/react/24/solid";
 import routes from "@/routes";
 
 export function Auth() {

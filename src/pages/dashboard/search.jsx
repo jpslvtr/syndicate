@@ -60,7 +60,7 @@ export function Search() {
             className="m-0 flex items-center justify-between p-6"
           >
             <div>
-              <Typography variant="h5" className="mb-4">Groups</Typography>
+              <Typography variant="h5" className="mb-4">Search</Typography>
               <Typography
                 variant="small"
                 className="flex items-center gap-1 font-normal text-blue-gray-600"
@@ -76,7 +76,7 @@ export function Search() {
                     type="text"
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    placeholder="Search Users..."
+                    placeholder="Search by email"
                     style={{ width: '500px' }}
                   />
                   <br />

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { projectsTableData, ordersOverviewData } from "@/data";
 import { db, auth, functions } from '../../../firebase-config';
 import { httpsCallable } from 'firebase/functions';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';

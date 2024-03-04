@@ -4,12 +4,7 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from '../../../firebase-config';
 import { useNavigate } from 'react-router-dom';
-import {
-  Input,
-  Checkbox,
-  Button,
-  Typography,
-} from "@material-tailwind/react";
+import { Input, Button, Typography, } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 
 export function SignIn() {
