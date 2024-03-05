@@ -8,14 +8,14 @@ Syndicate is a private newsletter platform that allows individuals to share more
 ![Alt text](/public/img/readme/1.jpg "1")
 
 ## Home
-![Alt text](/public/img/readme/1.jpg "2")
+![Alt text](/public/img/readme/2.jpg "2")
 
 ## Profile
-![Alt text](/public/img/readme/1.jpg "3")
+![Alt text](/public/img/readme/3.jpg "3")
 
 ## Subscribers
-![Alt text](/public/img/readme/1.jpg "4")
+![Alt text](/public/img/readme/4.jpg "4")
 
 ## Firestore
-![Alt text](/public/img/readme/1.jpg "5")
+![Alt text](/public/img/readme/5.jpg "5")
 
