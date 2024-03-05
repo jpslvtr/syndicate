@@ -7,11 +7,11 @@ Syndicate is a private newsletter platform that allows individuals to share more
 ## Sign in
 ![Alt text](/public/img/readme/1.jpg "1")
 
-## Home
+<!-- ## Home
 ![Alt text](/public/img/readme/2.jpg "2")
 
 ## Profile
-![Alt text](/public/img/readme/3.jpg "3")
+![Alt text](/public/img/readme/3.jpg "3") -->
 
 ## Subscribers
 ![Alt text](/public/img/readme/4.jpg "4")
