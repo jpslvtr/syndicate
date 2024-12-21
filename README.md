@@ -13,7 +13,7 @@ Syndicate is a private newsletter platform for individuals seeking a more meanin
 - Custom subscriber groups
 - Profile customization
 - Follower management
-- Email notifications
+- Email notifications  
 
 ![Alt text](/public/img/readme/1.jpg "1")
 
