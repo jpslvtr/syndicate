@@ -2,20 +2,19 @@
 
 ![Alt text](/public/img/synlogo.jpg "0")
 
-Syndicate is a private newsletter platform that allows individuals to share more intimate and controlled updates with specific groups of friends, offering an old-school, authentic alternative to social media.
+Syndicate is a private newsletter platform for individuals seeking a more meaningful and private way to communicate with their circles.
 
-## Sign in
+## Features
+
+- Private newsletter creation and management
+- Group-based subscriber management
+- Google authentication
+- Rich text editor for newsletters
+- Custom subscriber groups
+- Profile customization
+- Follower management
+- Email notifications
+
 ![Alt text](/public/img/readme/1.jpg "1")
 
-<!-- ## Home
-![Alt text](/public/img/readme/2.jpg "2")
-
-## Profile
-![Alt text](/public/img/readme/3.jpg "3") -->
-
-## Subscribers
 ![Alt text](/public/img/readme/4.jpg "4")
-
-## Firestore
-![Alt text](/public/img/readme/5.jpg "5")
-
