@@ -1,7 +1,5 @@
 # Syndicate
 
-![Alt text](/public/img/synlogo.jpg "0")
-
 Syndicate is a private newsletter platform for individuals seeking a more meaningful and private way to communicate with their circles.
 
 ## Features
