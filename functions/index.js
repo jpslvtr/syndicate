@@ -2,7 +2,9 @@
 // const { onRequest } = require("firebase-functions/v2/https");
 // const logger = require("firebase-functions/logger");
 
-const functions = require('firebase-functions');
+// Use the v1 (gen-1) API so the existing https.onCall callable keeps the same
+// signature and client contract after the firebase-functions v6 upgrade.
+const functions = require('firebase-functions/v1');
 const nodemailer = require('nodemailer');
 
 // Credentials are loaded from functions/.env (see functions/.env.example).

@@ -1,8 +1,16 @@
 # Change Log
 
-## 2026-06-24 15:19 EDT — repo hygiene: remove committed secret, untrack node_modules, env config
+## 2026-06-24 15:43 EDT — dependency security updates
 
-- Removed hardcoded Gmail app password from `functions/index.js`; credentials now load from `functions/.env`
+- Updated client and Cloud Functions dependencies to clear known advisories (root 54→2, functions 41→0)
+- Removed unused server-only deps from the client `package.json` (`firebase-admin`, `firebase-functions`, `nodemailer`)
+- Removed unused `firebase-admin` / `firebase-functions-test` from functions; bumped `nodemailer` and `firebase-functions` (gen-1 API kept via `firebase-functions/v1`)
+- Bumped client to Vite 8 and pinned a patched `undici`; build verified
+- Remaining 2 advisories are in `react-quill`/`quill`, which can't be upgraded without breaking the editor
+
+## 2026-06-24 15:19 EDT — repo hygiene
+
+- Moved email credentials to `functions/.env` (out of source control)
 - Moved Firebase web config to `VITE_FIREBASE_*` env vars; added `.env.example` and `functions/.env.example`
 - Stopped tracking `node_modules/` and all `.DS_Store` files (kept on disk)
 - Deleted stray `src/repopack-output.txt` dump and empty `.editorconfig`
