@@ -5,13 +5,15 @@ import { getAuth } from "firebase/auth";
 import { getFunctions, httpsCallable } from 'firebase/functions';
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+// Values are loaded from .env (see .env.example). Firebase web config is safe to
+// expose client-side; access is controlled by Firestore security rules.
 const firebaseConfig = {
-    apiKey: "AIzaSyBL2a_yKaMNh3idQ3lpE8ZtEfALlL9fkxI",
-    authDomain: "syndicate-3b716.firebaseapp.com",
-    projectId: "syndicate-3b716",
-    storageBucket: "syndicate-3b716.appspot.com",
-    messagingSenderId: "1015060173288",
-    appId: "1:1015060173288:web:275aff743a268a72d2945d"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);

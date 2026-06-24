@@ -1,5 +1,14 @@
 # Change Log
 
+## 2026-06-24 15:19 EDT — repo hygiene: remove committed secret, untrack node_modules, env config
+
+- Removed hardcoded Gmail app password from `functions/index.js`; credentials now load from `functions/.env`
+- Moved Firebase web config to `VITE_FIREBASE_*` env vars; added `.env.example` and `functions/.env.example`
+- Stopped tracking `node_modules/` and all `.DS_Store` files (kept on disk)
+- Deleted stray `src/repopack-output.txt` dump and empty `.editorconfig`
+- Expanded `.gitignore` (`.DS_Store`, `.vite/`, `dist/`, tooling dumps, `CLAUDE.md`)
+- Rewrote README into a concise setup-focused version
+
 ## [2.1.0] 2023-11-14
 - Upgrade to Material Tailwind `v2`
 

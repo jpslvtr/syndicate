@@ -5,12 +5,13 @@
 const functions = require('firebase-functions');
 const nodemailer = require('nodemailer');
 
-// Adjusting string quotes and fixing indentation
+// Credentials are loaded from functions/.env (see functions/.env.example).
+// EMAIL_PASS must be a Gmail app password (requires two-step verification).
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "jktpark1@gmail.com",
-        pass: "mguwawtdgbwmhlomi", // secure app password; requires two-step
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
     },
 });
 

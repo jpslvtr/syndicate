@@ -64,3 +64,19 @@ node_modules/
 
 # dotenv environment variables file
 .env
+.env.local
+.env.*.local
+
+# macOS
+.DS_Store
+
+# Vite cache and build output
+.vite/
+dist/
+
+# Tooling dumps
+repopack-output.txt
+repomix-output.*
+
+# Claude Code local instructions
+CLAUDE.md

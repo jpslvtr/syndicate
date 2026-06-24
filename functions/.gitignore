@@ -1,1 +1,4 @@
 node_modules/
+
+# Local function secrets (loaded by the Firebase CLI at deploy/emulate time)
+.env
